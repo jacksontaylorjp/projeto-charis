@@ -3,9 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { PatientController } from './patient/patient.controller';
-import { PatientService } from './patient/patient.service';
-import { PatientModule } from './patient/patient.module';
+import { PatientModule } from './registration/registration.module';
+import { RegistrationController } from './registration/registration.controller';
+import { RegistrationService } from './registration/registration.service';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { PatientModule } from './patient/patient.module';
     }),
     PatientModule,
   ],
-  controllers: [AppController, PatientController],
-  providers: [AppService, PatientService],
+  controllers: [AppController, RegistrationController],
+  providers: [AppService, RegistrationService],
 })
 export class AppModule { }

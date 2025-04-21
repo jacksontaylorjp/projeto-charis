@@ -1,2 +1,2 @@
-# projeto-charis
-sistema para o projeto charis
+# template-fullstack-node
+Template genérico para criação de projeto com a stack nodejs

@@ -1,0 +1,25 @@
+{
+  "name": "template-fullstack-node",
+  "version": "1.0.0",
+  "description": "Template genérico para criação de projeto com a stack nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacksontaylorjp/template-fullstack-node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jacksontaylorjp/template-fullstack-node/issues"
+  },
+  "homepage": "https://github.com/jacksontaylorjp/template-fullstack-node#readme",
+  "workspaces": [
+    "front",
+    "back"
+  ]
+}

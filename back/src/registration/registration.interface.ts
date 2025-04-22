@@ -2,7 +2,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 
 export interface Registration {
   id?: string;
-  event: string;
+  eventId: string;
   cpf: string;
   name: string;
   phone: string;
@@ -11,6 +11,6 @@ export interface Registration {
   funcaoIgreja: string;
   profession: string;
   namePastor: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }

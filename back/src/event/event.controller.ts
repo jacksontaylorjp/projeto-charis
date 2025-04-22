@@ -1,0 +1,22 @@
+import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { EventService } from './event.service';
+import { CreateEventDto } from './event.dto';
+import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
+import { Timestamp } from 'firebase-admin/firestore';
+
+@Controller('events')
+export class EventController {
+    constructor(private readonly eventService: EventService) { }
+
+    // @UseGuards(FirebaseAuthGuard)
+    @Post()
+    @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    async create(@Body() eventData: CreateEventDto, @Req() req: any) {
+        // const userId = req.user.uid;
+        return this.eventService.create(eventData, "adm");
+    }
+    @Get()
+    async findOn(@Req() req: any) {
+        return this.eventService.findOn();
+    }
+}

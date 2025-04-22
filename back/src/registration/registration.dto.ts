@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsDate, IsNotEmpty, IsString } from "class-validator";
 import { Registration } from "./registration.interface";
 import { Timestamp } from "firebase-admin/firestore";
 
 export class CreateRegistrationDto implements Registration {
     @IsString()
     @IsNotEmpty({ message: 'O evento é obrigatório.' })
-    event: string;
+    eventId: string;
 
     @IsString()
     @IsNotEmpty({ message: 'O nome é obrigatório.' })
@@ -39,7 +39,9 @@ export class CreateRegistrationDto implements Registration {
     @IsNotEmpty({ message: 'O nome do pastor é obrigatório.' })
     namePastor: string;
 
-    // Campos de timestamp não precisam de validação
-    createdAt: Timestamp;
-    updatedAt: Timestamp;
+    // @IsDate()
+    // createdAt: Timestamp;
+
+    // @IsDate()
+    // updatedAt: Timestamp;
 }

@@ -4,7 +4,6 @@ import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
 import { Registration } from './registration.interface';
 import { CreateRegistrationDto } from './registration.dto';
 
-// @UseGuards(FirebaseAuthGuard)
 @Controller('registrations')
 export class RegistrationController {
   constructor(private readonly registrationService: RegistrationService) { }
@@ -15,10 +14,11 @@ export class RegistrationController {
     return this.registrationService.create(registrationData);
   }
 
-  // @Get()
-  // async findAll(@Req() req: any) {
-  //   return this.registrationService.findAll();
-  // }
+  @UseGuards(FirebaseAuthGuard)
+  @Get('/event/:event')
+  async findByEvent(@Param('event') event: string) {
+    return this.registrationService.findByEvent(event);
+  }
 
   // @Get(':id')
   // async findOne(@Param('id') id: string) {

@@ -11,6 +11,7 @@ export interface Registration {
   funcaoIgreja: string;
   profession: string;
   namePastor: string;
+  paid?: boolean;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }

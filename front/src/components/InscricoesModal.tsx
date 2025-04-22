@@ -1,5 +1,7 @@
 import { Modal, Form, Input, DatePicker, Button } from 'antd';
 import { useState } from 'react';
+import { RegistrationService } from '../services/RegistrationService';
+import { Registration } from '../interfaces/Registration';
 
 interface InscricoesModalProps {
     eventId: string;
@@ -8,11 +10,17 @@ interface InscricoesModalProps {
 const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const registrationService = new RegistrationService();
 
-
-    const handleFinish = (values: any) => {
-        console.log(values);
+    const handleFinish = async (values: any) => {
+        const data: Registration = {
+            ...values,
+            eventId
+        }
+        console.log(data);
+        await registrationService.create(data);
         form.resetFields(); // Reseta os campos do formulário
+        closeModal();
     };
 
     const showModal = () => {
@@ -21,8 +29,6 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
     const closeModal = () => {
         setIsModalOpen(false);
     }
-
-
 
     return (
         <>
@@ -49,14 +55,6 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                     onFinish={handleFinish}
                 >
                     <Form.Item
-                        label="CPF"
-                        name="cpf"
-                        rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
                         label="Nome"
                         name="name"
                         rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
@@ -64,6 +62,13 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         <Input />
                     </Form.Item>
 
+                    <Form.Item
+                        label="CPF"
+                        name="cpf"
+                        rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
                     <Form.Item
                         label="Telefone"
                         name="phone"

@@ -16,6 +16,7 @@ export class RegistrationService {
       ...registrationData,
       createdAt: now,
       updatedAt: now,
+      paid: false
     });
 
     return { id: patientRef.id, ...registrationData, createdAt: now, updatedAt: now };

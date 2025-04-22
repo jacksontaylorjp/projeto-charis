@@ -1,10 +1,28 @@
-import { Button, Card, Flex, Grid, Image, List, Typography } from "antd";
+import { Card, Flex, Grid, Image, List, Typography } from "antd";
 import logo from "../../public/charis-logo.png"
+import InscricoesModal from "../components/InscricoesModal";
+import { useEffect, useState } from "react";
+import { EventService } from "../services/EventService";
 
-const Landingpage = () => {
+const Inscricao = () => {
     const { useBreakpoint } = Grid;
     const screens = useBreakpoint(); // Responsividade aqui
     const isMobile = !screens.md; // Se for menor que md, é mobile
+    const [eventOn, setEventOn] = useState([]);
+    const eventService = new EventService();
+
+    const findEventsOn = async () => {
+        try {
+            const res = await eventService.findOn();
+            setEventOn(res)
+        } catch (error) {
+            console.error("Error fetching events:", error);
+        }
+    };
+
+    useEffect(() => {
+        findEventsOn();
+    }, []);
 
     return (
         <>
@@ -35,7 +53,7 @@ const Landingpage = () => {
                 >
                     Projeto Evangelístico Charis
                 </Typography.Title>
-                <Button
+                {/* <Button
                     type="primary"
                     style={{
                         fontWeight: 600,
@@ -43,15 +61,14 @@ const Landingpage = () => {
                     }}
                 >
                     Entrar
-                </Button>
+                </Button> */}
             </Flex>
 
             {/* Conteúdo Principal */}
             <Flex
                 vertical
                 style={{
-                    minHeight: "100vh",
-                    padding: "5rem 2rem 2rem", // Ajusta o padding para compensar o menu fixo
+                    padding: "7rem 2rem 2rem", // Ajusta o padding para compensar o menu fixo
                     justifyContent: "center", // Centraliza verticalmente
                 }}
             >
@@ -63,58 +80,40 @@ const Landingpage = () => {
                         gap: "2rem",
                     }}
                 >
-                    {/* Card de Login */}
-                    <Card
-                        style={{
-                            width: isMobile ? "100%" : "400px",
-                            maxWidth: "100%",
-                            borderRadius: "16px",
-                            padding: "2rem",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "1.5rem",
-                        }}
-                    >
-                        <Typography.Title
-                            level={3}
+                    {/* Card de Events */}
+                    {eventOn.map((event) => (
+                        <Card
+                            key={event.id}
+                            title="Inscrição aberta"
                             style={{
-                                fontWeight: 600,
-                                fontSize: "24px",
-                                textAlign: "center",
+                                width: isMobile ? "100%" : "400px",
+                                maxWidth: "100%",
+                                borderRadius: "16px",
+                                padding: "2rem",
+                                boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "1.5rem",
                             }}
                         >
-                            Inscrições abertas
-                        </Typography.Title>
-                        <Typography>
-                            Participe do projeto evangelístico em Conde-PB, de 01/01/2025 a 07/01/2025.
-                        </Typography>
-
-                        <Button
-                            type="primary"
-                            // icon={<GoogleOutlined />}
-                            size="large"
-                            // onClick={handleLoginWithGoogle}
-                            style={{
-                                width: "100%",
-                                background: "#4285F4",
-                                borderColor: "#4285F4",
-                                transition: "all 0.3s ease",
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.background = "#3367D6";
-                                e.currentTarget.style.borderColor = "#3367D6";
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.background = "#4285F4";
-                                e.currentTarget.style.borderColor = "#4285F4";
-                            }}
-                        >
-                            Inscreva-se Agora
-                        </Button>
-                    </Card>
+                            <Typography.Title
+                                level={3}
+                                style={{
+                                    fontWeight: 600,
+                                    fontSize: "24px",
+                                    textAlign: "center",
+                                }}
+                            >
+                                {event.title}
+                            </Typography.Title>
+                            <Typography>
+                                {event.description}
+                            </Typography>
+                            <InscricoesModal eventId={event.id} />
+                        </Card>
+                    ))}
 
                     {/* Ilustração + Benefícios */}
                     <Flex
@@ -188,4 +187,4 @@ const Landingpage = () => {
         </>
     );
 }
-export default Landingpage;
+export default Inscricao;

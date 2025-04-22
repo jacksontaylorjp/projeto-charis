@@ -14,6 +14,7 @@ const Inscricao = () => {
     const findEventsOn = async () => {
         try {
             const res = await eventService.findOn();
+            // @ts-ignore
             setEventOn(res)
         } catch (error) {
             console.error("Error fetching events:", error);
@@ -81,8 +82,10 @@ const Inscricao = () => {
                     }}
                 >
                     {/* Card de Events */}
+
                     {eventOn.map((event) => (
                         <Card
+                            // @ts-ignore
                             key={event.id}
                             title="Inscrição aberta"
                             style={{
@@ -106,12 +109,23 @@ const Inscricao = () => {
                                     textAlign: "center",
                                 }}
                             >
-                                {event.title}
+
+                                {
+                                    // @ts-ignore
+                                    event.title
+                                }
                             </Typography.Title>
                             <Typography>
-                                {event.description}
+                                {
+                                    // @ts-ignore
+                                    event.description
+                                }
                             </Typography>
-                            <InscricoesModal eventId={event.id} />
+                            
+                            <InscricoesModal eventId={
+                                // @ts-ignore
+                                event.id
+                                } />
                         </Card>
                     ))}
 

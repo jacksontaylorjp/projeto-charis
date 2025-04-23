@@ -193,7 +193,7 @@ const Inscricao = () => {
                     }}
                 >
                     <Typography.Text type="secondary" style={{ fontSize: "14px" }}>
-                        © {new Date().getFullYear()} Projeto Evangelístico Charis. Todos os direitos
+                        © {new Date().getFullYear()} Projeto Evangelístico Charis - Todos os direitos
                         reservados.
                     </Typography.Text>
                 </Flex>

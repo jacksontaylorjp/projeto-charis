@@ -17,8 +17,6 @@ const Inscricao = () => {
     const findEventsOn = async () => {
         try {
             const res = await eventService.findOn();
-            console.log(res);
-
             // @ts-ignore
             setEventOn(res)
         } catch (error) {

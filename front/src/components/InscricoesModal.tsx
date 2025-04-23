@@ -1,4 +1,4 @@
-import { Modal, Form, Input, DatePicker, Button } from 'antd';
+import { Modal, Form, Input, Button } from 'antd';
 import { useState } from 'react';
 import { RegistrationService } from '../services/RegistrationService';
 import { Registration } from '../interfaces/Registration';
@@ -23,11 +23,34 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
         closeModal();
     };
 
+    const formatCPF = (value: string) => {
+        return value
+            .replace(/\D/g, '') // Remove caracteres não numéricos
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{2})$/, '$1-$2');
+    };
+
+    const formatPhone = (value: string) => {
+        return value
+            .replace(/\D/g, '') // Remove caracteres não numéricos
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d)/, '$1-$2');
+    };
+
+    const formatBirthDate = (value: string) => {
+        return value
+            .replace(/\D/g, '') // Remove caracteres não numéricos
+            .replace(/(\d{2})(\d)/, '$1/$2')
+            .replace(/(\d{2})(\d)/, '$1/$2');
+    };
+
     const showModal = () => {
         setIsModalOpen(true);
     }
     const closeModal = () => {
         setIsModalOpen(false);
+        form.resetFields();
     }
 
     return (
@@ -66,27 +89,56 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         <Form.Item
                             label="CPF"
                             name="cpf"
-                            rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
+                            rules={[
+                                { required: true, message: 'Por favor, insira o CPF!' },
+                                { pattern: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/, message: 'CPF inválido!' }
+                            ]}
                             style={{ display: 'inline-block', width: 'calc(50% - 8px)', marginRight: '8px' }}
                         >
-                            <Input />
+                            <Input
+                                placeholder="000.000.000-00"
+                                onChange={(e) => form.setFieldsValue({ cpf: formatCPF(e.target.value) })}
+                            />
                         </Form.Item>
                         <Form.Item
                             label="Telefone"
                             name="phone"
-                            rules={[{ required: true, message: 'Por favor, insira o telefone!' }]}
+                            rules={[
+                                { required: true, message: 'Por favor, insira o telefone!' },
+                                { pattern: /^\(\d{2}\) \d{5}-\d{4}$/, message: 'Telefone inválido!' }
+                            ]}
+                            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                        >
+                            <Input
+                                placeholder="(00) 00000-0000"
+                                onChange={(e) => form.setFieldsValue({ phone: formatPhone(e.target.value) })}
+                            />
+                        </Form.Item>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Form.Item
+                            label="Data de Nascimento"
+                            name="birthDate"
+                            rules={[
+                                { required: true, message: 'Por favor, insira a data de nascimento!' },
+                                { pattern: /^\d{2}\/\d{2}\/\d{4}$/, message: 'Data de nascimento inválida!' }
+                            ]}
+                            style={{ display: 'inline-block', width: 'calc(50% - 8px)', marginRight: '8px' }}
+                        >
+                            <Input
+                                placeholder="DD/MM/AAAA"
+                                onChange={(e) => form.setFieldsValue({ birthDate: formatBirthDate(e.target.value) })}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Profissão"
+                            name="profession"
+                            rules={[{ required: true, message: 'Por favor, insira a profissão!' }]}
                             style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
                         >
                             <Input />
                         </Form.Item>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Data de Nascimento"
-                        name="birthDate"
-                        rules={[{ required: true, message: 'Por favor, insira a data de nascimento!' }]}
-                    >
-                        <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
                     </Form.Item>
 
                     <Form.Item
@@ -101,14 +153,6 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         label="Função na Igreja"
                         name="funcaoIgreja"
                         rules={[{ required: true, message: 'Por favor, insira a função na igreja!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Profissão"
-                        name="profession"
-                        rules={[{ required: true, message: 'Por favor, insira a profissão!' }]}
                     >
                         <Input />
                     </Form.Item>

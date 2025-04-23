@@ -6,6 +6,7 @@ import semadpb from "../../public/semadpb.png"
 import InscricoesModal from "../components/InscricoesModal";
 import { useEffect, useState } from "react";
 import { EventService } from "../services/EventService";
+import { WhatsAppOutlined } from "@ant-design/icons";
 
 const Inscricao = () => {
     const { useBreakpoint } = Grid;
@@ -55,7 +56,7 @@ const Inscricao = () => {
                         whiteSpace: "nowrap", // Evita quebra de linha no título
                     }}
                 >
-                    Projeto Evangelístico Charis
+                    Projeto Charis - ADPB
                 </Typography.Title>
                 {/* <Button
                     type="primary"
@@ -99,7 +100,18 @@ const Inscricao = () => {
                             <Card
                                 // @ts-ignore
                                 key={event.id}
-                                title="Inscrição aberta"
+                                title={
+                                    <Typography.Title
+                                        level={2}
+                                        style={{
+                                            fontSize: "38px",
+                                            margin: 0,
+                                            textAlign: "center"
+                                        }}
+                                    >
+                                        Inscrição aberta
+                                    </Typography.Title>
+                                }
                                 style={{
                                     width: isMobile ? "100%" : "400px",
                                     maxWidth: "100%",
@@ -110,9 +122,9 @@ const Inscricao = () => {
                                     flexDirection: "column",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    gap: "1.5rem",
                                 }}
                             >
+
                                 <Typography.Title
                                     level={3}
                                     style={{
@@ -138,6 +150,33 @@ const Inscricao = () => {
                                     // @ts-ignore
                                     event.id
                                 } />
+                                {/* Texto acima das ações */}
+                                <Typography.Text style={{ display: "block", textAlign: "center", marginBottom: 8 }}>
+                                    Para mais informações, <b>clique e fale conosco pelo WhatsApp:</b>
+                                </Typography.Text>
+                                {/* Ações customizadas */}
+                                <Flex justify="center" align="center" gap={16} style={{ marginBottom: 16 }} vertical>
+                                    <a
+                                        href="https://wa.me/5583988855154"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Fale conosco no WhatsApp: (83) 98885-5154"
+                                        style={{ color: "#25D366", fontSize: 24, display: "flex", alignItems: "center", gap: 6 }}
+                                    >
+                                        <WhatsAppOutlined />
+                                        <span style={{ color: "#222", fontSize: 16 }}>(83) 98885-5154</span>
+                                    </a>
+                                    <a
+                                        href="https://wa.me/5583988858458"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Fale conosco no WhatsApp: (83) 98885-8458"
+                                        style={{ color: "#25D366", fontSize: 24, display: "flex", alignItems: "center", gap: 6 }}
+                                    >
+                                        <WhatsAppOutlined />
+                                        <span style={{ color: "#222", fontSize: 16 }}>(83) 98885-8458</span>
+                                    </a>
+                                </Flex>
                             </Card>
                         ))}
 
@@ -182,6 +221,7 @@ const Inscricao = () => {
                             preview={false}
                             style={{
                                 marginTop: "2rem",
+                                padding: "1rem",
                                 height: "200px",
                                 width: "100%",
                                 objectFit: "contain",
@@ -193,6 +233,7 @@ const Inscricao = () => {
                             style={{
                                 marginTop: "1rem",
                                 gap: "1rem",
+                                padding: "1rem",
                                 justifyContent: "center",
                                 width: "100%",
                                 background: "#1677ff",

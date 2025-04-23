@@ -12,7 +12,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const registrationService = new RegistrationService();
 
-    const handleFinish = async (values: any) => {
+    const handleFinish = async (values: Registration) => {
         const data: Registration = {
             ...values,
             eventId
@@ -61,6 +61,8 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                 onClick={showModal}
                 style={{
                     width: "100%",
+                    marginTop: "18px",
+                    marginBottom: "18px",
                 }}
 
             >

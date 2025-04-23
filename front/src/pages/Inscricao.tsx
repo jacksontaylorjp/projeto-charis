@@ -1,5 +1,8 @@
 import { Card, Flex, Grid, Image, List, Typography } from "antd";
-import logo from "../../public/charis-logo.png"
+import charis from "../../public/charis.png"
+import ceem from "../../public/ceem.png"
+import adpb from "../../public/adpb.png"
+import semadpb from "../../public/semadpb.png"
 import InscricoesModal from "../components/InscricoesModal";
 import { useEffect, useState } from "react";
 import { EventService } from "../services/EventService";
@@ -14,6 +17,8 @@ const Inscricao = () => {
     const findEventsOn = async () => {
         try {
             const res = await eventService.findOn();
+            console.log(res);
+
             // @ts-ignore
             setEventOn(res)
         } catch (error) {
@@ -83,51 +88,60 @@ const Inscricao = () => {
                 >
                     {/* Card de Events */}
 
-                    {eventOn.map((event) => (
-                        <Card
-                            // @ts-ignore
-                            key={event.id}
-                            title="Inscrição aberta"
-                            style={{
-                                width: isMobile ? "100%" : "400px",
-                                maxWidth: "100%",
-                                borderRadius: "16px",
-                                padding: "2rem",
-                                boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: "1.5rem",
-                            }}
-                        >
-                            <Typography.Title
-                                level={3}
-                                style={{
-                                    fontWeight: 600,
-                                    fontSize: "24px",
-                                    textAlign: "center",
-                                }}
-                            >
-
-                                {
-                                    // @ts-ignore
-                                    event.title
-                                }
+                    {eventOn.length === 0 ?
+                        <Flex align="center" justify="center" vertical>
+                            <Typography.Title level={3}>
+                                No momento, não há inscrições disponíveis!
                             </Typography.Title>
                             <Typography>
-                                {
-                                    // @ts-ignore
-                                    event.description
-                                }
+                                Fique atento às nossas redes sociais para novidades e atualizações.
                             </Typography>
-                            
-                            <InscricoesModal eventId={
+                        </Flex>
+                        : eventOn.map((event) => (
+                            <Card
                                 // @ts-ignore
-                                event.id
+                                key={event.id}
+                                title="Inscrição aberta"
+                                style={{
+                                    width: isMobile ? "100%" : "400px",
+                                    maxWidth: "100%",
+                                    borderRadius: "16px",
+                                    padding: "2rem",
+                                    boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    gap: "1.5rem",
+                                }}
+                            >
+                                <Typography.Title
+                                    level={3}
+                                    style={{
+                                        fontWeight: 600,
+                                        fontSize: "24px",
+                                        textAlign: "center",
+                                    }}
+                                >
+
+                                    {
+                                        // @ts-ignore
+                                        event.title
+                                    }
+                                </Typography.Title>
+                                <Typography>
+                                    {
+                                        // @ts-ignore
+                                        event.description
+                                    }
+                                </Typography>
+
+                                <InscricoesModal eventId={
+                                    // @ts-ignore
+                                    event.id
                                 } />
-                        </Card>
-                    ))}
+                            </Card>
+                        ))}
 
                     {/* Ilustração + Benefícios */}
                     <Flex
@@ -165,7 +179,7 @@ const Inscricao = () => {
                         </List>
 
                         <Image
-                            src={logo}
+                            src={charis}
                             alt="Ilustração do projeto evangelístico"
                             preview={false}
                             style={{
@@ -173,8 +187,54 @@ const Inscricao = () => {
                                 height: "200px",
                                 width: "100%",
                                 objectFit: "contain",
+                                background: "#1677ff",
+                                borderRadius: "50%"
                             }}
                         />
+                        <Flex
+                            style={{
+                                marginTop: "1rem",
+                                gap: "1rem",
+                                justifyContent: "center",
+                                width: "100%",
+                                background: "#1677ff",
+
+                            }}
+                        >
+                            <Image
+                                src={adpb}
+                                alt="Imagem pequena 1"
+                                preview={false}
+                                style={{
+                                    height: "80px",
+                                    width: "80px",
+                                    objectFit: "cover",
+                                    borderRadius: "50%",
+                                }}
+                            />
+                            <Image
+                                src={semadpb}
+                                alt="Imagem pequena 2"
+                                preview={false}
+                                style={{
+                                    height: "80px",
+                                    width: "80px",
+                                    objectFit: "cover",
+                                    borderRadius: "50%",
+                                }}
+                            />
+                            <Image
+                                src={ceem}
+                                alt="Imagem pequena 3"
+                                preview={false}
+                                style={{
+                                    height: "80px",
+                                    width: "80px",
+                                    objectFit: "cover",
+                                    borderRadius: "50%",
+                                }}
+                            />
+                        </Flex>
                     </Flex>
                 </Flex>
 

@@ -62,19 +62,23 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item
-                        label="CPF"
-                        name="cpf"
-                        rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Telefone"
-                        name="phone"
-                        rules={[{ required: true, message: 'Por favor, insira o telefone!' }]}
-                    >
-                        <Input />
+                    <Form.Item>
+                        <Form.Item
+                            label="CPF"
+                            name="cpf"
+                            rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
+                            style={{ display: 'inline-block', width: 'calc(50% - 8px)', marginRight: '8px' }}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            label="Telefone"
+                            name="phone"
+                            rules={[{ required: true, message: 'Por favor, insira o telefone!' }]}
+                            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                        >
+                            <Input />
+                        </Form.Item>
                     </Form.Item>
 
                     <Form.Item

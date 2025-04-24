@@ -29,7 +29,7 @@ const InscritosModalTemp = ({ event }: InscritosModalTempProps) => {
                 Ver inscritos
             </Button>
             <Modal
-                title="Inscritos"
+                title={"Inscritos"}
                 open={isModalOpen}
                 onCancel={closeModal}
                 footer={null} // Remove os botões padrão do modal
@@ -43,6 +43,8 @@ const InscritosModalTemp = ({ event }: InscritosModalTempProps) => {
                 ) : (
                     <p>Nenhum inscrito.</p>
                 )}
+                {event?.registrations &&
+                    event?.registrations.length}
             </Modal>
         </>
     );

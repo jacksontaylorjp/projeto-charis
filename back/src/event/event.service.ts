@@ -6,7 +6,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 @Injectable()
 export class EventService {
     private collection = firestore.collection('events');
-      async create(
+    async create(
         eventData: Omit<IEvent, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>,
         userId: string,
     ): Promise<IEvent> {
@@ -23,5 +23,27 @@ export class EventService {
     async findOn(): Promise<IEvent[]> {
         const snapshot = await this.collection.where('registrationOpen', '==', true).get();
         return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IEvent[];
-      }
+    }
+    async findAll(): Promise<IEvent[]> {
+        const snapshot = await this.collection.get();
+        const events = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IEvent[];
+
+        // Buscar as registrations para cada evento
+        const eventsWithRegistrations = await Promise.all(
+            events.map(async (event) => {
+                const registrationsSnapshot = await this.collection
+                //@ts-ignore
+                    .doc(event.id)
+                    .collection('registrations')
+                    .get();
+                const registrations = registrationsSnapshot.docs.map((regDoc) => ({
+                    id: regDoc.id,
+                    ...regDoc.data(),
+                }));
+                return { ...event, registrations };
+            })
+        );
+
+        return eventsWithRegistrations;
+    }
 }

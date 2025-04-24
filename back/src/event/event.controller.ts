@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe }
 import { EventService } from './event.service';
 import { CreateEventDto } from './event.dto';
 import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
-import { Timestamp } from 'firebase-admin/firestore';
+// import { Timestamp } from 'firebase-admin/firestore';
 
 @Controller('events')
 export class EventController {
@@ -15,8 +15,15 @@ export class EventController {
         // const userId = req.user.uid;
         return this.eventService.create(eventData, "adm");
     }
-    @Get()
-    async findOn(@Req() req: any) {
+    
+    @Get('on')
+    async findOn() {
         return this.eventService.findOn();
+    }
+    
+    @UseGuards(FirebaseAuthGuard)
+    @Get('all')
+    async findAll() {
+        return this.eventService.findAll();
     }
 }

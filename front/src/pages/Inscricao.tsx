@@ -102,9 +102,8 @@ const Inscricao = () => {
                                 key={event.id}
                                 title={
                                     <Typography.Title
-                                        level={2}
+                                        level={1}
                                         style={{
-                                            fontSize: "38px",
                                             margin: 0,
                                             textAlign: "center"
                                         }}

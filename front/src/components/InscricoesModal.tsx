@@ -17,7 +17,6 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
             ...values,
             eventId
         }
-        console.log(data);
         await registrationService.create(data);
         form.resetFields(); // Reseta os campos do formulário
         closeModal();

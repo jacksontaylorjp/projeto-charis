@@ -102,10 +102,11 @@ const Inscricao = () => {
                                 key={event.id}
                                 title={
                                     <Typography.Title
-                                        level={1}
+                                        level={2}
                                         style={{
                                             margin: 0,
-                                            textAlign: "center"
+                                            textAlign: "center",
+                                            whiteSpace: "pre-line", // quebra apenas nos espaços em branco
                                         }}
                                     >
                                         Inscrição aberta

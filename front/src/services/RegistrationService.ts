@@ -6,6 +6,7 @@ export class RegistrationService {
         try {
             const res = await apiFetch("/registrations", "POST", data);
             alert("Inscrição criada com sucesso!")
+            window.location.reload();
             return res;
         } catch (error) {
             console.error("Erro ao fazer inscricão:", error);

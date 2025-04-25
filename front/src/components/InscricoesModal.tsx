@@ -79,7 +79,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                     onFinish={handleFinish}
                 >
                     <Form.Item
-                        label="Nome"
+                        label="Nome completo"
                         name="name"
                         rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
                     >
@@ -143,7 +143,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Congregação"
+                        label="Congregação/Denominação"
                         name="congregacao"
                         rules={[{ required: true, message: 'Por favor, insira a congregação!' }]}
                     >

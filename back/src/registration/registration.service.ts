@@ -19,6 +19,22 @@ export class RegistrationService {
       paid: false
     });
 
+    // Conta o total de inscrições após adicionar a nova
+    const snapshot = await collection.get();
+    const totalRegistration = snapshot.size;
+
+    // Busca o evento para comparar vacancies e registrationOpen
+    const eventRef = firestore.collection('events').doc(registrationData.eventId);
+    const eventDoc = await eventRef.get();
+    if (eventDoc.exists) {
+      const eventData = eventDoc.data();
+      if (eventData && typeof eventData.vacancies === 'number' && eventData.registrationOpen !== false) {
+        if (totalRegistration >= eventData.vacancies) {
+          await eventRef.update({ registrationOpen: false });
+        }
+      }
+    }
+
     return { id: patientRef.id, ...registrationData, createdAt: now, updatedAt: now };
   }
 
@@ -37,40 +53,40 @@ export class RegistrationService {
     }).filter((item) => item !== null) as Registration[]; // Filtra valores nulos
   }
 
-  async findOne(event: string, id: string): Promise<Registration | null> {
-    const collection = this.getCollection(event); // Obtém a coleção com base no evento
-    const doc = await collection.doc(id).get();
-    if (!doc.exists) return null;
+  // async findOne(event: string, id: string): Promise<Registration | null> {
+  //   const collection = this.getCollection(event); // Obtém a coleção com base no evento
+  //   const doc = await collection.doc(id).get();
+  //   if (!doc.exists) return null;
 
-    const data = doc.data();
-    if (!data) return null; // Verifica se data é undefined
-    return {
-      id,
-      ...data,
-      createdAt: data.createdAt?.toDate(), // Converte Timestamp para Date
-      updatedAt: data.updatedAt?.toDate(), // Converte Timestamp para Date
-    } as Registration;
-  }
+  //   const data = doc.data();
+  //   if (!data) return null; // Verifica se data é undefined
+  //   return {
+  //     id,
+  //     ...data,
+  //     createdAt: data.createdAt?.toDate(), // Converte Timestamp para Date
+  //     updatedAt: data.updatedAt?.toDate(), // Converte Timestamp para Date
+  //   } as Registration;
+  // }
 
-  async update(event: string, id: string, registrationData: Partial<Registration>): Promise<boolean> {
-    const collection = this.getCollection(event); // Obtém a coleção com base no evento
-    const docRef = collection.doc(id);
-    const doc = await docRef.get();
+  // async update(event: string, id: string, registrationData: Partial<Registration>): Promise<boolean> {
+  //   const collection = this.getCollection(event); // Obtém a coleção com base no evento
+  //   const docRef = collection.doc(id);
+  //   const doc = await docRef.get();
 
-    if (!doc.exists) return false;
+  //   if (!doc.exists) return false;
 
-    await docRef.update({ ...registrationData, updatedAt: Timestamp.now() }); // Usa Timestamp para updatedAt
-    return true;
-  }
+  //   await docRef.update({ ...registrationData, updatedAt: Timestamp.now() }); // Usa Timestamp para updatedAt
+  //   return true;
+  // }
 
-  async delete(event: string, id: string): Promise<boolean> {
-    const collection = this.getCollection(event); // Obtém a coleção com base no evento
-    const docRef = collection.doc(id);
-    const doc = await docRef.get();
+  // async delete(event: string, id: string): Promise<boolean> {
+  //   const collection = this.getCollection(event); // Obtém a coleção com base no evento
+  //   const docRef = collection.doc(id);
+  //   const doc = await docRef.get();
 
-    if (!doc.exists) return false;
+  //   if (!doc.exists) return false;
 
-    await docRef.delete();
-    return true;
-  }
+  //   await docRef.delete();
+  //   return true;
+  // }
 }

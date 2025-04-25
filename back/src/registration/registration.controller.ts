@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, UsePipes, ValidationPipe, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, UsePipes, ValidationPipe, Req } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
-import { Registration } from './registration.interface';
 import { CreateRegistrationDto } from './registration.dto';
 
 @Controller('registrations')

@@ -1,12 +1,12 @@
-import { Card, Flex, Grid, Image, List, Typography } from "antd";
-import charis from "../../public/charis.png"
-import ceem from "../../public/ceem.png"
-import adpb from "../../public/adpb.png"
-import semadpb from "../../public/semadpb.png"
-import InscricoesModal from "../components/InscricoesModal";
+import { Button, Card, Flex, Grid, Image, List, Typography } from "antd";
+import charis from "../../../public/logocharis.png"
+import ceem from "../../../public/logocem.png"
+import adpb from "../../../public/logoadpb.png"
+import semadpb from "../../../public/logosemad.png"
 import { useEffect, useState } from "react";
-import { EventService } from "../services/EventService";
 import { WhatsAppOutlined } from "@ant-design/icons";
+import { EventService } from "../../services/EventService";
+import InscricoesModal from "../../components/InscricoesModal";
 
 const Inscricao = () => {
     const { useBreakpoint } = Grid;
@@ -53,20 +53,16 @@ const Inscricao = () => {
                         margin: 0,
                         fontWeight: 600,
                         fontSize: "20px",
-                        whiteSpace: "nowrap", // Evita quebra de linha no título
                     }}
                 >
                     Projeto Charis - ADPB
                 </Typography.Title>
-                {/* <Button
+                <Button
                     type="primary"
-                    style={{
-                        fontWeight: 600,
-                        whiteSpace: "nowrap", // Evita quebra de linha no botão
-                    }}
+                    onClick={() => alert("Disponível em breve!")}
                 >
                     Entrar
-                </Button> */}
+                </Button>
             </Flex>
 
             {/* Conteúdo Principal */}
@@ -225,7 +221,7 @@ const Inscricao = () => {
                                 height: "200px",
                                 width: "100%",
                                 objectFit: "contain",
-                                background: "#1677ff",
+                                // background: "#1677ff",
                                 borderRadius: "50%"
                             }}
                         />
@@ -236,7 +232,7 @@ const Inscricao = () => {
                                 padding: "1rem",
                                 justifyContent: "center",
                                 width: "100%",
-                                background: "#1677ff",
+                                // background: "#1677ff",
 
                             }}
                         >
@@ -292,8 +288,8 @@ const Inscricao = () => {
                     }}
                 >
                     <Typography.Text type="secondary" style={{ fontSize: "14px" }}>
-                        © {new Date().getFullYear()} Projeto Evangelístico Charis - Todos os direitos
-                        reservados.
+                        © Copyright {new Date().getFullYear()} Projeto charis. 
+                        Desenvolvido por <a href="https://www.instagram.com/jackson_taylor_jt" target="_blank">JtDev</a>
                     </Typography.Text>
                 </Flex>
             </Flex>

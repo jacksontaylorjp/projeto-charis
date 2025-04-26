@@ -1,17 +1,15 @@
 import React from "react"
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
-import { Spin, Flex } from "antd";
+import Loading from "./components/Loading";
 
 const ProtectedRoute: React.FC = () => {
     const { user, loading } = useAuth();
     if (loading) {
         return (
-            <Flex justify="center" align="center" style={{ minHeight: "100vh" }}>
-                <Spin tip="Carregando..." size="large" />
-            </Flex>
+            <Loading />
         );
     }
-    return user ? <Outlet /> : <Navigate to="/adm" replace />;
+    return user ? <Outlet /> : <Navigate to="/adm/login" replace />;
 };
 export default ProtectedRoute;

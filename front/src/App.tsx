@@ -1,10 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Inscricao from './pages/Inscricao'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './ProtectedRouter'
-import LoginAdm from './pages/LoginAdm'
-import HomeAdm from './pages/HomeAdm'
+import Home from './pages/adm/Home'
+import Login from './pages/adm/Login'
+import Inscricao from './pages/user/Inscricao'
+import NotFound from './pages/NotFound'
+import MainLayout from './MainLayout'
+import Inscricoes from './pages/adm/Inscricoes'
 
 function App() {
   return (
@@ -12,10 +14,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route Component={ProtectedRoute}>
-            <Route path='home-adm' Component={HomeAdm} />
+            <Route Component={MainLayout}>
+              <Route path='/adm/home' Component={Home} />
+              <Route path='/adm/inscricoes' Component={Inscricoes} />
+            </Route>
           </Route>
-          <Route path='/adm' Component={LoginAdm} />
+          <Route path='/adm/login' Component={Login} />
           <Route path='/' Component={Inscricao} />
+          <Route path='*' Component={NotFound} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -8,6 +8,7 @@ import NotFound from './pages/NotFound'
 import MainLayout from './MainLayout'
 import Inscricoes from './pages/adm/Inscricoes'
 import Registration from './pages/adm/Registration'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path='*' Component={NotFound} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </AuthProvider>
   )
 }

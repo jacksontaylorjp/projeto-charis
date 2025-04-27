@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { RegistrationService } from "../../services/RegistrationService";
 import { useParams, useNavigate } from "react-router-dom";
 import { IRegistration } from "../../interfaces/Registration";
-import { Table, Tag, Tooltip, Flex, Button } from "antd";
+import { Table, Tag, Tooltip, Flex, Button, Empty } from "antd";
 import { Check, ChevronLeft, X } from "lucide-react";
 
 const Registration = () => {
@@ -10,16 +10,24 @@ const Registration = () => {
     const { eventId } = useParams();
     const navigate = useNavigate();
     const [registrations, setRegistrations] = useState<IRegistration[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchRegistration = async () => {
         if (!eventId) {
             console.log("eventId não encontrado");
             return;
         }
-        const res = await registrationService.getByEvent(eventId);
-        //@ts-ignore
-        const sorted = [...res].sort((a, b) => a.name.localeCompare(b.name));
-        setRegistrations(sorted);
+        setLoading(true);
+        try {
+            const res = await registrationService.getByEvent(eventId);
+            //@ts-ignore
+            const sorted = [...res].sort((a, b) => a.name.localeCompare(b.name));
+            setRegistrations(sorted);
+        } catch (error) {
+            console.error("Erro ao buscar registros:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleTogglePaid = async (id: string, paid: boolean) => {
@@ -42,7 +50,9 @@ const Registration = () => {
                     {registrations.length} inscrito{registrations.length === 1 ? "" : "s"}
                 </Tag>
             </Flex>
+
             <Table
+                loading={loading}
                 dataSource={registrations}
                 rowKey="id"
                 pagination={{ pageSize: 5 }}
@@ -70,8 +80,7 @@ const Registration = () => {
                             <Tooltip title={record.paid ? "Marcar como não pago" : "Marcar como pago"}>
                                 <span
                                     style={{ cursor: "pointer" }}
-                                    //@ts-ignore
-                                    onClick={() => handleTogglePaid(record.id, record.paid)}
+                                    onClick={() => handleTogglePaid(record.id!, record.paid)}
                                 >
                                     {record.paid ? <X color="red" /> : <Check color="green" />}
                                 </span>
@@ -79,6 +88,11 @@ const Registration = () => {
                         ),
                     },
                 ]}
+                locale={{
+                    emptyText: !loading ? (
+                        <Empty description="Nenhuma inscrição encontrada." />
+                    ) : undefined,
+                }}
                 scroll={{ x: 800 }}
             />
         </Flex>

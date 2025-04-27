@@ -23,17 +23,16 @@ const Login = () => {
     return (
         <Flex align="center" justify="center" style={{ height: "100vh" }} vertical>
             <Image src={logo} alt='logo' preview={false} width={200} style={{ marginTop: -200 }} />
-            <Divider style={{ borderColor: "#1677ff" }}>Entrar com </Divider>
+            <Divider style={{ borderColor: "#1677ff" }}>Login </Divider>
             <Button
                 icon={<GoogleOutlined />}
                 onClick={handleLoginWithGoogle}
                 style={{
-                    width: "15%",
+                    width: "20rem",
                     height: "5%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: 0,
                 }}
             >
                 Entrar com Google

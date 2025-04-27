@@ -1,6 +1,6 @@
 import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
-import { Header } from "antd/es/layout/layout";
+// import { Header } from "antd/es/layout/layout";
 import SiderBar from "./components/SiderBar";
 // import Settings from "./components/Settings";
 
@@ -11,9 +11,9 @@ const MainLayout = () => {
         <Layout style={{ height: "100vh" }}>
             <SiderBar />
             <Layout style={{ background: "#e9f2f9", display: "flex", flexDirection: "column", height: "100vh" }}>
-                <Header style={{ display: "flex", justifyContent: "flex-end", padding: 0, marginRight: "15px", background: "#e9f2f9"}}>
-                    {/* <Settings /> */}
-                </Header>
+                {/* <Header style={{ display: "flex", justifyContent: "flex-end", padding: 0, marginRight: "15px", background: "#e9f2f9"}}>
+                    <Settings />
+                </Header> */}
                 <Content style={{ flex: 1, padding: "16px", overflow: "auto" }}>
                     <Outlet />
                 </Content>

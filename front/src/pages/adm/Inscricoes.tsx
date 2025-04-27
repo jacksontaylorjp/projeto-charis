@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { EventService } from "../../services/EventService";
 import { Content } from "antd/es/layout/layout";
-import { Badge, Card, Col, Flex, Row, Select, Space, Typography } from "antd";
-import { CircleCheck, CirclePlay, Edit, Eye, Play, RotateCw, X } from "lucide-react";
+import { Badge, Card, Col, Flex, Row } from "antd";
+import { LogIn, RotateCw } from "lucide-react";
 import Loading from "../../components/Loading";
+import { Event } from "../../interfaces/Event";
+import { useNavigate } from "react-router-dom";
 
 const Inscricoes = () => {
     // const navigate = useNavigate();
     const eventService = new EventService();
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshKey, setRefreshKey] = useState(0);
+    const navigate = useNavigate();
 
     const fetchEvents = async () => {
         setLoading(true);
@@ -28,8 +31,8 @@ const Inscricoes = () => {
 
     return (
         <Content style={{ padding: "16px" }}>
-            <Flex justify="space-between" align="center" style={{ marginBottom: "15px" }}>
-                <Space align="center">
+            <Flex justify="flex-end" align="center" style={{ marginBottom: "15px" }}>
+                {/* <Space align="center">
                     <Typography >Filtro:</Typography>
                     <Select
                         defaultValue="todos"
@@ -41,7 +44,7 @@ const Inscricoes = () => {
                             { value: 'encerrado', label: 'Encerrado' },
                         ]}
                     />
-                </Space>
+                </Space> */}
                 <RotateCw
                     color="#3a89c9"
                     size={20}
@@ -61,23 +64,27 @@ const Inscricoes = () => {
                                 hoverable
                                 style={{ border: '1px solid', borderColor: "#3a89c9" }}
                                 actions={[
-                                    <Play
+                                    // <Play
+                                    //     color="#3a89c9"
+                                    // // onClick={() => handleStatus(item.idUser!, item.idRegistro!, "Em andamento")}
+                                    // />,
+                                    // <Edit
+                                    //     color="green"
+                                    // // onClick={() => handleStatus(item.idUser!, item.idRegistro!, "Finalizado")}
+                                    // />,
+                                    <LogIn
                                         color="#3a89c9"
-                                    // onClick={() => handleStatus(item.idUser!, item.idRegistro!, "Em andamento")}
-                                    />,
-                                    <Edit
-                                        color="green"
-                                    // onClick={() => handleStatus(item.idUser!, item.idRegistro!, "Finalizado")}
-                                    />,
-                                    <Eye
-                                        color="#f26c4f"
-                                    // onClick={() => handleStatus(item.idUser!, item.idRegistro!, "Cancelado")}
+                                        onClick={() => navigate(`${item.id}`)}
                                     />,
                                 ]}
                             >
-                                <p><strong>Descrição:</strong> {item.description}</p>
+                                <p>
+                                    <strong>Descrição:</strong> {item.description.length > 80
+                                        ? item.description.slice(0, 80) + "..."
+                                        : item.description}
+                                </p>
                                 <p><strong>Vagas:</strong> {item.vacancies}</p>
-                                <p><strong>Quantidade de inscritos</strong> {}</p>
+                                {/* <p><strong>Quantidade de inscritos</strong> {}</p> */}
                             </Card>
                         </Badge.Ribbon>
                     </Col>

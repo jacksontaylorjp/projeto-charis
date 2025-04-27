@@ -7,6 +7,7 @@ import Inscricao from './pages/user/Inscricao'
 import NotFound from './pages/NotFound'
 import MainLayout from './MainLayout'
 import Inscricoes from './pages/adm/Inscricoes'
+import Registration from './pages/adm/Registration'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route Component={MainLayout}>
               <Route path='/adm/home' Component={Home} />
               <Route path='/adm/inscricoes' Component={Inscricoes} />
+              <Route path='/adm/inscricoes/:id' Component={Registration} />
             </Route>
           </Route>
           <Route path='/adm/login' Component={Login} />

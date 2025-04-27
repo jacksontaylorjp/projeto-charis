@@ -14,7 +14,7 @@ export class RegistrationController {
   }
 
   @UseGuards(FirebaseAuthGuard)
-  @Get('/event/:event')
+  @Get('/:event')
   async findByEvent(@Param('event') event: string) {
     return this.registrationService.findByEvent(event);
   }

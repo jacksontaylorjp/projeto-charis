@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param, UseGuards, UsePipes, ValidationPipe, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, UsePipes, ValidationPipe, Req, Put } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
 import { CreateRegistrationDto } from './registration.dto';
+import { Registration } from './registration.interface';
 
 @Controller('registrations')
 export class RegistrationController {
@@ -19,14 +20,18 @@ export class RegistrationController {
     return this.registrationService.findByEvent(event);
   }
 
+  @Put(':eventId/:registrationId')
+  async update(
+    @Param('eventId') eventId: string,
+    @Param('registrationId') registrationId: string,
+    @Body() registrationData: Partial<Registration>
+  ) {
+    return this.registrationService.update(eventId, registrationId, registrationData);
+  }
+
   // @Get(':id')
   // async findOne(@Param('id') id: string) {
   //   return this.registrationService.findOne(id);
-  // }
-
-  // @Put(':id')
-  // async update(@Param('id') id: string, @Body() registrationData: Partial<Registration>) {
-  //   return this.registrationService.update(id, registrationData);
   // }
 
   // @Delete(':id')

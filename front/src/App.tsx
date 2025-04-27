@@ -18,7 +18,7 @@ function App() {
             <Route Component={MainLayout}>
               <Route path='/adm/home' Component={Home} />
               <Route path='/adm/inscricoes' Component={Inscricoes} />
-              <Route path='/adm/inscricoes/:id' Component={Registration} />
+              <Route path='/adm/inscricoes/:eventId' Component={Registration} />
             </Route>
           </Route>
           <Route path='/adm/login' Component={Login} />

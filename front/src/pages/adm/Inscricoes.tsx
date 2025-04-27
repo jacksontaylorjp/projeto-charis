@@ -4,13 +4,13 @@ import { Content } from "antd/es/layout/layout";
 import { Badge, Card, Col, Flex, Row } from "antd";
 import { LogIn, RotateCw } from "lucide-react";
 import Loading from "../../components/Loading";
-import { Event } from "../../interfaces/Event";
+import { IEvent } from "../../interfaces/Event";
 import { useNavigate } from "react-router-dom";
 
 const Inscricoes = () => {
     // const navigate = useNavigate();
     const eventService = new EventService();
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<IEvent[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshKey, setRefreshKey] = useState(0);
     const navigate = useNavigate();

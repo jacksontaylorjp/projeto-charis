@@ -1,7 +1,7 @@
 import { Modal, Form, Input, Button } from 'antd';
 import { useState } from 'react';
 import { RegistrationService } from '../services/RegistrationService';
-import { Registration } from '../interfaces/Registration';
+import { IRegistration } from '../interfaces/Registration';
 
 interface InscricoesModalProps {
     eventId: string;
@@ -12,8 +12,8 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const registrationService = new RegistrationService();
 
-    const handleFinish = async (values: Registration) => {
-        const data: Registration = {
+    const handleFinish = async (values: IRegistration) => {
+        const data: IRegistration = {
             ...values,
             eventId
         }

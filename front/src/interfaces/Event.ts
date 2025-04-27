@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-export interface Event {
+export interface IEvent {
     id?: string;
     title: string;
     description: string;

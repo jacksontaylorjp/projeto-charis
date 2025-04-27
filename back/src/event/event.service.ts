@@ -26,24 +26,6 @@ export class EventService {
     }
     async findAll(): Promise<IEvent[]> {
         const snapshot = await this.collection.get();
-        const events = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IEvent[];
-
-        // Buscar as registrations para cada evento
-        const eventsWithRegistrations = await Promise.all(
-            events.map(async (event) => {
-                const registrationsSnapshot = await this.collection
-                //@ts-ignore
-                    .doc(event.id)
-                    .collection('registrations')
-                    .get();
-                const registrations = registrationsSnapshot.docs.map((regDoc) => ({
-                    id: regDoc.id,
-                    ...regDoc.data(),
-                }));
-                return { ...event, registrations };
-            })
-        );
-
-        return eventsWithRegistrations;
+        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IEvent[];
     }
 }

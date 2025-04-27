@@ -29,6 +29,9 @@ body {
   min-width: 320px;
   min-height: 100vh; */
 }
+.custom-menu .ant-menu-item-selected {
+  background-color: #3a89c9 !important;
+}
 /* 
 h1 {
   font-size: 3.2em;

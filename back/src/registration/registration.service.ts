@@ -53,40 +53,14 @@ export class RegistrationService {
     }).filter((item) => item !== null) as Registration[]; // Filtra valores nulos
   }
 
-  // async findOne(event: string, id: string): Promise<Registration | null> {
-  //   const collection = this.getCollection(event); // Obtém a coleção com base no evento
-  //   const doc = await collection.doc(id).get();
-  //   if (!doc.exists) return null;
+  async update(eventId: string, registrationId: string, registration: Partial<Registration>): Promise<boolean> {
+    const collection = this.getCollection(eventId); // Obtém a coleção com base no eventId
+    const docRef = collection.doc(registrationId);
+    const doc = await docRef.get();
 
-  //   const data = doc.data();
-  //   if (!data) return null; // Verifica se data é undefined
-  //   return {
-  //     id,
-  //     ...data,
-  //     createdAt: data.createdAt?.toDate(), // Converte Timestamp para Date
-  //     updatedAt: data.updatedAt?.toDate(), // Converte Timestamp para Date
-  //   } as Registration;
-  // }
+    if (!doc.exists) return false;
 
-  // async update(event: string, id: string, registrationData: Partial<Registration>): Promise<boolean> {
-  //   const collection = this.getCollection(event); // Obtém a coleção com base no evento
-  //   const docRef = collection.doc(id);
-  //   const doc = await docRef.get();
-
-  //   if (!doc.exists) return false;
-
-  //   await docRef.update({ ...registrationData, updatedAt: Timestamp.now() }); // Usa Timestamp para updatedAt
-  //   return true;
-  // }
-
-  // async delete(event: string, id: string): Promise<boolean> {
-  //   const collection = this.getCollection(event); // Obtém a coleção com base no evento
-  //   const docRef = collection.doc(id);
-  //   const doc = await docRef.get();
-
-  //   if (!doc.exists) return false;
-
-  //   await docRef.delete();
-  //   return true;
-  // }
+    await docRef.update({ ...registration, updatedAt: Timestamp.now() }); // Usa Timestamp para updatedAt
+    return true;
+  }
 }

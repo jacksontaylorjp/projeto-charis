@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import apiFetch from "../api/apiConfig";
 import { IRegistration } from "../interfaces/Registration";
 
@@ -5,11 +6,16 @@ export class RegistrationService {
     async create(data: IRegistration) {
         try {
             const res = await apiFetch("/registrations", "POST", data);
-            alert("Inscrição criada com sucesso!")
-            window.location.reload();
+            if (res) {
+                toast.success("Inscrição criada com sucesso!");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 5000);
+            }
             return res;
         } catch (error) {
-            console.error("Erro ao fazer inscricão:", error);
+            console.error("Erro ao fazer inscrição:", error);
+            toast.error("Erro ao criar inscrição.");
         }
     };
     async getByEvent(eventId: string) {
@@ -27,8 +33,12 @@ export class RegistrationService {
                 "PUT",
                 { paid }
             );
+            if (res){
+                toast.success("Registro atualizado com sucesso.")
+            }
             return res;
         } catch (error) {
+            toast.error("Erro ao atualizado com sucesso.")
             console.error("Erro ao atualizar status do pagamento", error);
         }
     }

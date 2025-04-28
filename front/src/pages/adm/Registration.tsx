@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { RegistrationService } from "../../services/RegistrationService";
 import { useParams, useNavigate } from "react-router-dom";
 import { IRegistration } from "../../interfaces/Registration";
-import { Table, Tag, Tooltip, Flex, Button, Empty } from "antd";
-import { Check, ChevronLeft, X } from "lucide-react";
+import { Table, Tag, Tooltip, Flex, Button, Empty, Space } from "antd";
+import { CheckSquare2Icon, ChevronLeft, Square } from "lucide-react";
+import DeleteModal from "../../components/DeleteModal";
 
 const Registration = () => {
     const registrationService = new RegistrationService();
@@ -33,6 +34,12 @@ const Registration = () => {
     const handleTogglePaid = async (id: string, paid: boolean) => {
         if (!eventId) return;
         await registrationService.updatePaidStatus(eventId, id, !paid);
+        fetchRegistration();
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!eventId) return;
+        await registrationService.delete(eventId, id);
         fetchRegistration();
     };
 
@@ -77,14 +84,17 @@ const Registration = () => {
                         key: "actions",
                         width: "15%",
                         render: (_: any, record: IRegistration) => (
-                            <Tooltip title={record.paid ? "Marcar como não pago" : "Marcar como pago"}>
-                                <span
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => handleTogglePaid(record.id!, record.paid)}
-                                >
-                                    {record.paid ? <X color="red" /> : <Check color="green" />}
-                                </span>
-                            </Tooltip>
+                            <Space size={10}>
+                                <Tooltip title={record.paid ? "Marcar como não pago" : "Marcar como pago"}>
+                                    <span
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => handleTogglePaid(record.id!, record.paid)}
+                                    >
+                                        {record.paid ? <CheckSquare2Icon color="green" /> : <Square color="#cf1322" />}
+                                    </span>
+                                </Tooltip>
+                                <DeleteModal onConfirm={() => handleDelete(record.id!)} />
+                            </Space>
                         ),
                     },
                 ]}

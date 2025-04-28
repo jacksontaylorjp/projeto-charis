@@ -57,10 +57,17 @@ export class RegistrationService {
     const collection = this.getCollection(eventId); // Obtém a coleção com base no eventId
     const docRef = collection.doc(registrationId);
     const doc = await docRef.get();
-
     if (!doc.exists) return false;
-
     await docRef.update({ ...registration, updatedAt: Timestamp.now() }); // Usa Timestamp para updatedAt
+    return true;
+  }
+
+  async delete(eventId: string, registrationId: string): Promise<boolean> {
+    const collection = this.getCollection(eventId);
+    const docRef = collection.doc(registrationId);
+    const doc = await docRef.get();
+    if (!doc.exists) return false;
+    await docRef.delete();
     return true;
   }
 }

@@ -9,6 +9,7 @@ import MainLayout from './MainLayout'
 import Inscricoes from './pages/adm/Inscricoes'
 import Registration from './pages/adm/Registration'
 import { ToastContainer } from 'react-toastify'
+import CategoriesMenu from './pages/adm/CategoriesMenu'
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
             <Route Component={MainLayout}>
               <Route path='/adm/home' Component={Home} />
               <Route path='/adm/inscricoes' Component={Inscricoes} />
-              <Route path='/adm/inscricoes/:eventId' Component={Registration} />
+              <Route path='/adm/inscricoes/categorias/:eventId' Component={CategoriesMenu} />
+              <Route path='/adm/inscritos/:eventId' Component={Registration} />
             </Route>
           </Route>
           <Route path='/adm/login' Component={Login} />
@@ -27,7 +29,7 @@ function App() {
           <Route path='*' Component={NotFound} />
         </Routes>
       </BrowserRouter>
-      <ToastContainer />
+      <ToastContainer autoClose={2000}/>
     </AuthProvider>
   )
 }

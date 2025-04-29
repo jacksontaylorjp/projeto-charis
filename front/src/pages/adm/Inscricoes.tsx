@@ -56,21 +56,21 @@ const Inscricoes = () => {
                                 color={item.registrationOpen ? "#3a89c9" : "#f26c4f"}
                             >
                                 <Card
-                                    title={item.title}
                                     hoverable
                                     style={{ border: '1px solid', borderColor: "#3a89c9" }}
                                     actions={[
                                         <LogIn
                                             key="enter"
                                             color="#3a89c9"
-                                            onClick={() => navigate(`${item.id}`)}
+                                            onClick={() => navigate(`categorias/${item.id}`)}
                                         />,
                                     ]}
                                 >
                                     <p>
-                                        <strong>Descrição:</strong> {item.description.length > 80
-                                            ? item.description.slice(0, 80) + "..."
-                                            : item.description}
+                                    <strong>Título:</strong> {item.title}
+                                    </p>
+                                    <p>
+                                        <strong>Descrição:</strong> {item.description}
                                     </p>
                                     <p><strong>Vagas:</strong> {item.vacancies}</p>
                                 </Card>

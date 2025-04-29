@@ -1,13 +1,15 @@
-import { Modal, Form, Input, Button } from 'antd';
-import { useState } from 'react';
+import { Modal, Form, Input, Button, Tooltip } from 'antd';
+import { useEffect, useState } from 'react';
 import { RegistrationService } from '../services/RegistrationService';
 import { IRegistration } from '../interfaces/Registration';
+import { Eye } from 'lucide-react';
 
 interface InscricoesModalProps {
     eventId: string;
+    registrationData?: IRegistration;
 }
 
-const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
+const InscricoesModal = ({ eventId, registrationData }: InscricoesModalProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const registrationService = new RegistrationService();
@@ -52,21 +54,38 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
         form.resetFields();
     }
 
+    useEffect(() => {
+        if (registrationData) {
+            form.setFieldsValue(registrationData)
+        }
+    }, [eventId])
+
+    const isReadOnly = !!registrationData;
+
     return (
         <>
-            <Button
-                type="primary"
-                size="large"
-                onClick={showModal}
-                style={{
-                    width: "100%",
-                    marginTop: "18px",
-                    marginBottom: "18px",
-                }}
-
-            >
-                Inscreva-se Agora
-            </Button>
+            {registrationData ?
+                <Tooltip title="Ver todos os dados">
+                    <Eye
+                        onClick={showModal}
+                        style={{
+                            cursor: "pointer",
+                            color: "#3a89c9"
+                        }}
+                    />
+                </Tooltip>
+                : <Button
+                    type="primary"
+                    size="large"
+                    onClick={showModal}
+                    style={{
+                        width: "100%",
+                        marginTop: "18px",
+                        marginBottom: "18px",
+                    }}
+                >
+                    Inscreva-se Agora
+                </Button>}
             <Modal
                 title="Inscrição"
                 open={isModalOpen}
@@ -83,7 +102,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         name="name"
                         rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
                     >
-                        <Input />
+                        <Input readOnly={isReadOnly} />
                     </Form.Item>
 
                     <Form.Item>
@@ -99,6 +118,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                             <Input
                                 placeholder="000.000.000-00"
                                 onChange={(e) => form.setFieldsValue({ cpf: formatCPF(e.target.value) })}
+                                readOnly={isReadOnly}
                             />
                         </Form.Item>
                         <Form.Item
@@ -113,6 +133,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                             <Input
                                 placeholder="(00) 00000-0000"
                                 onChange={(e) => form.setFieldsValue({ phone: formatPhone(e.target.value) })}
+                                readOnly={isReadOnly}
                             />
                         </Form.Item>
                     </Form.Item>
@@ -130,6 +151,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                             <Input
                                 placeholder="DD/MM/AAAA"
                                 onChange={(e) => form.setFieldsValue({ birthDate: formatBirthDate(e.target.value) })}
+                                readOnly={isReadOnly}
                             />
                         </Form.Item>
                         <Form.Item
@@ -138,7 +160,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                             rules={[{ required: true, message: 'Por favor, insira a profissão!' }]}
                             style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
                         >
-                            <Input />
+                            <Input readOnly={isReadOnly} />
                         </Form.Item>
                     </Form.Item>
 
@@ -147,7 +169,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         name="congregacao"
                         rules={[{ required: true, message: 'Por favor, insira a congregação!' }]}
                     >
-                        <Input />
+                        <Input readOnly={isReadOnly} />
                     </Form.Item>
 
                     <Form.Item
@@ -155,7 +177,7 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         name="funcaoIgreja"
                         rules={[{ required: true, message: 'Por favor, insira a função na igreja!' }]}
                     >
-                        <Input />
+                        <Input readOnly={isReadOnly} />
                     </Form.Item>
 
                     <Form.Item
@@ -163,13 +185,15 @@ const InscricoesModal = ({ eventId }: InscricoesModalProps) => {
                         name="namePastor"
                         rules={[{ required: true, message: 'Por favor, insira o nome do pastor!' }]}
                     >
-                        <Input />
+                        <Input readOnly={isReadOnly} />
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-                            Enviar
-                        </Button>
+                        {registrationData ? "" :
+                            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                                Enviar
+                            </Button>
+                        }
                     </Form.Item>
                 </Form>
             </Modal>

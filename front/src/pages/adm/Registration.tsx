@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { RegistrationService } from "../../services/RegistrationService";
 import { useParams, useNavigate } from "react-router-dom";
 import { IRegistration } from "../../interfaces/Registration";
-import { Table, Tag, Tooltip, Flex, Button, Empty, Space } from "antd";
-import { CheckSquare2Icon, ChevronLeft, Square } from "lucide-react";
+import { Table, Tag, Flex, Button, Empty, Space, Switch } from "antd";
+import { ChevronLeft, Printer } from "lucide-react";
 import DeleteModal from "../../components/DeleteModal";
+import InscricoesModal from "../../components/InscricoesModal";
 
 const Registration = () => {
     const registrationService = new RegistrationService();
@@ -12,6 +13,7 @@ const Registration = () => {
     const navigate = useNavigate();
     const [registrations, setRegistrations] = useState<IRegistration[]>([]);
     const [loading, setLoading] = useState(true);
+    const [switchLoadingId, setSwitchLoadingId] = useState<string | null>(null);
 
     const fetchRegistration = async () => {
         if (!eventId) {
@@ -33,14 +35,46 @@ const Registration = () => {
 
     const handleTogglePaid = async (id: string, paid: boolean) => {
         if (!eventId) return;
+        setSwitchLoadingId(id);
         await registrationService.updatePaidStatus(eventId, id, !paid);
-        fetchRegistration();
+        await fetchRegistration();
+        setSwitchLoadingId(null);
     };
 
     const handleDelete = async (id: string) => {
         if (!eventId) return;
         await registrationService.delete(eventId, id);
         fetchRegistration();
+    };
+
+    // Função para imprimir a tabela de inscrições
+    const handlePrint = () => {
+        const printContent = document.getElementById("registration-table-print");
+        if (printContent) {
+            const printWindow = window.open("", "", "width=900,height=700");
+            if (printWindow) {
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Imprimir Inscrições</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; padding: 24px; }
+                                table { border-collapse: collapse; width: 100%; }
+                                th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                                th { background: #f5f5f5; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2>Lista de Inscrições</h2>
+                            ${printContent.innerHTML}
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+            }
+        }
     };
 
     useEffect(() => {
@@ -53,10 +87,53 @@ const Registration = () => {
                 <Button type="link" onClick={() => navigate(-1)} style={{ padding: 0, fontSize: 16 }}>
                     <ChevronLeft />
                 </Button>
-                <Tag color="blue" style={{ fontSize: 16, padding: "2px 12px" }}>
-                    {registrations.length} inscrito{registrations.length === 1 ? "" : "s"}
-                </Tag>
+                <Flex align="center" gap={8}>
+                    <Tag color="#3a89c9" style={{ fontSize: 16, padding: "2px 12px" }}>
+                        {registrations.length} inscrito{registrations.length === 1 ? "" : "s"}
+                    </Tag>
+                    <Button
+                        type="text"
+                        icon={<Printer size={20} />}
+                        onClick={handlePrint}
+                        style={{ color: "#3a89c9" }}
+                    />
+                </Flex>
             </Flex>
+
+            <div style={{ display: "none" }}>
+                <div id="registration-table-print" style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 900 }}>
+                        <thead>
+                            <tr>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Nome</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>CPF</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Telefone</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Data de Nascimento</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Profissão</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Congregação</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Função na Igreja</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Nome do Pastor</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {registrations.map((reg) => (
+                                <tr key={reg.id}>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.name}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.cpf}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.phone}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.birthDate}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.profession}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.congregacao}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.funcaoIgreja}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.namePastor}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.paid ? "Pago" : "Não Pago"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <Table
                 loading={loading}
@@ -72,12 +149,16 @@ const Registration = () => {
                         dataIndex: "paid",
                         key: "status",
                         width: "15%",
-                        render: (paid: boolean) =>
-                            paid ? (
-                                <Tag color="green">Pago</Tag>
-                            ) : (
-                                <Tag color="red">Não Pago</Tag>
-                            ),
+                        render: (paid: boolean, record: IRegistration) => (
+                            <Switch
+                                checked={paid}
+                                checkedChildren="Pago"
+                                unCheckedChildren="Não Pago"
+                                onChange={() => handleTogglePaid(record.id!, paid)}
+                                style={{ backgroundColor: paid ? "#52c41a" : "#cf1322" }}
+                                loading={switchLoadingId === record.id}
+                            />
+                        ),
                     },
                     {
                         title: "Ações",
@@ -85,14 +166,7 @@ const Registration = () => {
                         width: "15%",
                         render: (_: any, record: IRegistration) => (
                             <Space size={10}>
-                                <Tooltip title={record.paid ? "Marcar como não pago" : "Marcar como pago"}>
-                                    <span
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => handleTogglePaid(record.id!, record.paid)}
-                                    >
-                                        {record.paid ? <CheckSquare2Icon color="green" /> : <Square color="#cf1322" />}
-                                    </span>
-                                </Tooltip>
+                                <InscricoesModal eventId={record.id!} registrationData={record} />
                                 <DeleteModal onConfirm={() => handleDelete(record.id!)} />
                             </Space>
                         ),

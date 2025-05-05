@@ -2,13 +2,12 @@ import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe }
 import { EventService } from './event.service';
 import { CreateEventDto } from './event.dto';
 import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
-// import { Timestamp } from 'firebase-admin/firestore';
 
 @Controller('events')
 export class EventController {
     constructor(private readonly eventService: EventService) { }
 
-    // @UseGuards(FirebaseAuthGuard)
+    @UseGuards(FirebaseAuthGuard)
     @Post()
     @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
     async create(@Body() eventData: CreateEventDto, @Req() req: any) {

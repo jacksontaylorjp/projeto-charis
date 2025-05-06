@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { IEvent } from "../interfaces/Event";
 import { useAuth } from "../contexts/AuthContext";
-import { Button, ConfigProvider, FloatButton, Form, FormProps, Input, InputNumber, Modal } from "antd";
+import { Button, ConfigProvider, Flex, FloatButton, Form, FormProps, Input, InputNumber, Modal, Tooltip } from "antd";
 import { EventService } from "../services/EventService";
 import { FilePenLine, Plus } from "lucide-react";
 
 interface EventModalProps {
     data?: IEvent;
+    setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
 }
-const EventModal = ({ data }: EventModalProps) => {
+const EventModal = ({ data, setEvents }: EventModalProps) => {
     const { user } = useAuth();
     const eventService = new EventService();
     const [form] = Form.useForm();
@@ -39,6 +40,8 @@ const EventModal = ({ data }: EventModalProps) => {
             const res = await eventService.create(event);
             if (res) {
                 setIsLoading(false);
+                //@ts-ignore
+                setEvents(prev => [...prev, res]);
                 form.resetFields();
                 setIsModalOpen(false);
             }
@@ -80,7 +83,10 @@ const EventModal = ({ data }: EventModalProps) => {
 
     return (
         <>  {data ?
-            <FilePenLine onClick={showModal} style={{ cursor: "pointer", color: "#3a89c9" }} /> :
+            <Tooltip title="Editar evento">
+                <FilePenLine onClick={showModal} style={{ cursor: "pointer", color: "#3a89c9" }} />
+            </Tooltip>
+            :
             //refatorar e criar um thema global
             <ConfigProvider
                 theme={{
@@ -92,26 +98,21 @@ const EventModal = ({ data }: EventModalProps) => {
                     },
                 }}
             >
-                <FloatButton
-                    type="primary"
-                    shape="circle"
-                    icon={<Plus size={18} />}
-                    onClick={showModal}
-                />
+                <Tooltip title="Nova inscrição">
+                    <FloatButton
+                        type="primary"
+                        shape="circle"
+                        icon={<Plus size={18} />}
+                        onClick={showModal}
+                    />
+                </Tooltip>
             </ConfigProvider>
         }
             <Modal
                 title="Nova inscrição"
                 open={isModalOpen}
                 onCancel={handleCancel}
-                width={{
-                    xs: '90%',
-                    sm: '80%',
-                    md: '70%',
-                    lg: '60%',
-                    xl: '50%',
-                    xxl: '40%',
-                }}
+
                 footer={null}
             >
                 <Form form={form}
@@ -132,34 +133,57 @@ const EventModal = ({ data }: EventModalProps) => {
                         ]}
                     >
                         <Input
-                            maxLength={15}
+                            maxLength={50}
                         />
                     </Form.Item>
                     <Form.Item
                         label="Descrição"
                         name="description"
                     >
-                        <Input.TextArea />
+                        <Input.TextArea maxLength={500}/>
                     </Form.Item>
-                    <Form.Item
-                        label="Quantidade de vagas"
-                        name="vacancies"
-                        rules={[
-                            { required: true, message: 'Campo obrigatório!' },
-                        ]}
-                    >
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item
-                        label="Valor"
-                        name="value"
-                        rules={[
-                            { required: true, message: 'Campo obrigatório!' },
-                        ]}
-                    >
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item style={{ textAlign: "center" }}>
+                    <Flex justify="space-between">
+                        <Form.Item
+                            label="Qtd vagas"
+                            name="vacancies"
+                            rules={[
+                                { required: true, message: 'Campo obrigatório!' },
+                            ]}
+                        >
+                            <InputNumber />
+                        </Form.Item>
+                        <Form.Item
+                            label="Valor"
+                            name="value"
+                            rules={[
+                                { required: true, message: 'Campo obrigatório!' },
+                            ]}
+                        >
+                            <InputNumber
+                                style={{ width: "100%" }}
+                                min={0}
+                                step={0.01}
+                                formatter={value =>
+                                    //@ts-ignore
+                                    value !== undefined && value !== null && value !== ''
+                                        ? `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                        : ''
+                                }
+                                //@ts-ignore
+                                parser={value => {
+                                    if (!value) return 0;
+                                    // Remove R$ e espaços, mantém pontos (milhar) e vírgula (decimal)
+                                    const cleaned = value.replace(/[R$\s]/g, '');
+                                    // Remove pontos de milhar e troca vírgula por ponto decimal
+                                    const normalized = cleaned.replace(/\./g, '').replace(',', '.');
+                                    const num = parseFloat(normalized);
+                                    return isNaN(num) ? 0 : num;
+                                }}
+                            />
+                        </Form.Item>
+                    </Flex>
+                    <Form.Item style={{ textAlign: "end" }}>
+                        <Button onClick={handleCancel} style={{ marginRight: 10}}>Cancelar</Button>
                         <Button type="primary" htmlType="submit" loading={isloading}>Salvar</Button>
                     </Form.Item>
                 </Form>

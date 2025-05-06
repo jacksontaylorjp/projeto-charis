@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './event.dto';
 import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
 import { Request } from 'express';
+import { IEvent } from './event.interface';
 
 interface AuthenticatedRequest extends Request {
     user: {
@@ -21,6 +22,14 @@ export class EventController {
     async create(@Body() eventData: CreateEventDto, @Req() req: AuthenticatedRequest) {
         const userId = req.user.uid;
         return this.eventService.create(eventData, userId);
+    }
+    @UseGuards(FirebaseAuthGuard)
+    @Put(':eventId')
+    async updateStatus(
+        @Param('eventId') eventId: string,
+        @Body() event: Partial<IEvent>
+    ) {
+        return this.eventService.update(eventId, event);
     }
     //busca só os eventos que estão online
     @Get('on')

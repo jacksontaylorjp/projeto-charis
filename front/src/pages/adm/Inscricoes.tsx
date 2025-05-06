@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { EventService } from "../../services/EventService";
 import { Content } from "antd/es/layout/layout";
-import { Badge, Card, Col, Flex, Row, Empty } from "antd";
-import { LogIn, RotateCw } from "lucide-react";
+import { Badge, Card, Col, Flex, Row, Empty, Tooltip } from "antd";
+import { LogIn, RotateCw, Lock, Unlock } from "lucide-react";
 import Loading from "../../components/Loading";
 import { IEvent } from "../../interfaces/Event";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,7 @@ const Inscricoes = () => {
 
     return (
         <Content style={{ padding: "16px" }}>
-            <EventModal />
+            <EventModal setEvents={setEvents} />
             <Flex justify="flex-end" align="center" style={{ marginBottom: "15px" }}>
                 <RotateCw
                     color="#3a89c9"
@@ -51,30 +51,97 @@ const Inscricoes = () => {
                 </Flex>
             ) : (
                 <Row gutter={[16, 16]} justify="center" style={{ width: "100%" }}>
-                    {events.map((item, index) => (
-                        <Col key={index} xs={24} sm={12} md={8} lg={6} xl={6}>
+                    {events.map((item: IEvent, index) => (
+                        <Col
+                            key={index}
+                            xs={24}
+                            sm={12}
+                            md={8}
+                            lg={8}
+                            xl={8}
+                            style={{ display: "flex", width: "100%", maxWidth: 300 }}
+                        >
                             <Badge.Ribbon
                                 text={String(item.registrationOpen ? "Aberto" : "Encerrado")}
                                 color={item.registrationOpen ? "#3a89c9" : "#f26c4f"}
                             >
                                 <Card
-                                    hoverable
-                                    style={{ border: '1px solid', borderColor: "#3a89c9" }}
+                                    style={{
+                                        border: '1px solid',
+                                        borderColor: "#3a89c9",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "space-between"
+                                    }}
                                     actions={[
-                                        <LogIn
-                                            key="enter"
-                                            color="#3a89c9"
-                                            onClick={() => navigate(`categorias/${item.id}`)}
-                                        />,
+                                        <Tooltip title="Ver categorias" key="enter-tip">
+                                            <LogIn
+                                                key="enter"
+                                                color="#3a89c9"
+                                                onClick={() => navigate(`categorias/${item.id}`)}
+                                            />
+                                        </Tooltip>,
+                                        item.registrationOpen ? (
+                                            <Tooltip title="Fechar inscrições" key="lock-tip">
+                                                <Lock
+                                                    key="toggle"
+                                                    color="#f26c4f"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={async () => {
+                                                        //@ts-ignore
+                                                        const updated = await eventService.updateStatus(item.id, false);
+                                                        if (updated) {
+                                                            setEvents(prev =>
+                                                                prev.map(ev =>
+                                                                    ev.id === item.id
+                                                                        ? { ...ev, registrationOpen: false }
+                                                                        : ev
+                                                                )
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        ) : (
+                                            <Tooltip title="Abrir inscrições" key="unlock-tip">
+                                                <Unlock
+                                                    key="toggle"
+                                                    color="#3a89c9"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={async () => {
+                                                        //@ts-ignore
+                                                        const updated = await eventService.updateStatus(item.id, true);
+                                                        if (updated) {
+                                                            setEvents(prev =>
+                                                                prev.map(ev =>
+                                                                    ev.id === item.id
+                                                                        ? { ...ev, registrationOpen: true }
+                                                                        : ev
+                                                                )
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        )
                                     ]}
                                 >
-                                    <p>
-                                        <strong>Título:</strong> {item.title}
-                                    </p>
-                                    <p>
-                                        <strong>Descrição:</strong> {item.description}
-                                    </p>
-                                    <p><strong>Vagas:</strong> {item.vacancies}</p>
+                                    <div style={{ flex: 1 }}>
+                                        <p>
+                                            <strong>Título:</strong> {item.title}
+                                        </p>
+                                        <p style={{ wordBreak: "break-word" }}>
+                                            <strong>Descrição:</strong> {item.description}
+                                        </p>
+                                        <p><strong>Vagas:</strong> {item.vacancies}</p>
+                                    </div>
+                                    <div>
+                                        <p>
+                                            <strong>Valor:</strong> {item.value !== undefined && item.value !== null
+                                                ? `R$ ${Number(item.value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                                : ''}
+                                        </p>
+                                    </div>
                                 </Card>
                             </Badge.Ribbon>
                         </Col>

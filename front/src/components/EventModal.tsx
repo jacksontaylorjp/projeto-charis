@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IEvent } from "../interfaces/Event";
 import { useAuth } from "../contexts/AuthContext";
-import { Button, ConfigProvider, FloatButton, Form, FormProps, Input, Modal } from "antd";
+import { Button, ConfigProvider, FloatButton, Form, FormProps, Input, InputNumber, Modal } from "antd";
 import { EventService } from "../services/EventService";
 import { FilePenLine, Plus } from "lucide-react";
 
@@ -80,14 +80,14 @@ const EventModal = ({ data }: EventModalProps) => {
 
     return (
         <>  {data ?
-            <FilePenLine onClick={showModal} style={{ cursor: "pointer", color: "#E6AF21" }} /> :
+            <FilePenLine onClick={showModal} style={{ cursor: "pointer", color: "#3a89c9" }} /> :
             //refatorar e criar um thema global
             <ConfigProvider
                 theme={{
                     components: {
                         FloatButton: {
-                            colorPrimary: "#E6AF21",
-                            colorPrimaryHover: "#e04e2a",
+                            colorPrimary: "#3a89c9",
+                            colorPrimaryHover: "#1b325f",
                         },
                     },
                 }}
@@ -101,7 +101,7 @@ const EventModal = ({ data }: EventModalProps) => {
             </ConfigProvider>
         }
             <Modal
-                title="Criar inscrição"
+                title="Nova inscrição"
                 open={isModalOpen}
                 onCancel={handleCancel}
                 width={{
@@ -120,29 +120,45 @@ const EventModal = ({ data }: EventModalProps) => {
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
                     style={{
-                        width: "100%",
-                        maxHeight: "90vh",
                         overflow: "auto",
                         boxSizing: "content-box",
                     }}
                 >
-                        <Form.Item
-                            label="Título"
-                            name="title"
-                            rules={[
-                                { required: true, message: 'Campo obrigatório!' },
-                            ]}
-                        >
-                            <Input
-                                maxLength={15}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Descrição"
-                            name="description"
-                        >
-                            <Input />
-                        </Form.Item>
+                    <Form.Item
+                        label="Título"
+                        name="title"
+                        rules={[
+                            { required: true, message: 'Campo obrigatório!' },
+                        ]}
+                    >
+                        <Input
+                            maxLength={15}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Descrição"
+                        name="description"
+                    >
+                        <Input.TextArea />
+                    </Form.Item>
+                    <Form.Item
+                        label="Quantidade de vagas"
+                        name="vacancies"
+                        rules={[
+                            { required: true, message: 'Campo obrigatório!' },
+                        ]}
+                    >
+                        <InputNumber />
+                    </Form.Item>
+                    <Form.Item
+                        label="Valor"
+                        name="value"
+                        rules={[
+                            { required: true, message: 'Campo obrigatório!' },
+                        ]}
+                    >
+                        <InputNumber />
+                    </Form.Item>
                     <Form.Item style={{ textAlign: "center" }}>
                         <Button type="primary" htmlType="submit" loading={isloading}>Salvar</Button>
                     </Form.Item>

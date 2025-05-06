@@ -4,6 +4,8 @@ export interface IEvent {
     id?: string;
     title: string;
     description?: string;
+    value: number;
+    vacancies: number;
     // startDate: Timestamp;
     // endDate: Timestamp;
     registrationOpen: boolean;   

@@ -16,6 +16,7 @@ export class EventService {
             createdBy: userId,
             createdAt: now,
             updatedAt: now,
+            registrationOpen: false,
         });
 
         return { id: eventRef.id, ...eventData, createdBy: userId, createdAt: now, updatedAt: now };

@@ -4,14 +4,13 @@ import { Content } from "antd/es/layout/layout";
 import { useAuth } from "../../contexts/AuthContext";
 import { EventService } from "../../services/EventService";
 import { RegistrationService } from "../../services/RegistrationService";
-import { Calendar, Users, CheckCircle, AlertCircle } from "lucide-react";
+import { Users, CheckCircle, AlertCircle } from "lucide-react";
 import { toast } from "react-toastify";
 import { IEvent } from "../../interfaces/Event";
 
 const Home = () => {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [eventCount, setEventCount] = useState(0);
     const [registrationCount, setRegistrationCount] = useState(0);
     const [paidCount, setPaidCount] = useState(0);
     const [unpaidCount, setUnpaidCount] = useState(0);
@@ -35,7 +34,6 @@ const Home = () => {
                 const events = await eventsService.findAll();
                 //@ts-ignore
                 setEvents(events);
-                setEventCount(events.length);
 
                 // Buscar inscrições de todos os eventos
                 let totalRegistrations = 0;
@@ -112,8 +110,11 @@ const Home = () => {
                 <Typography.Title level={3}>
                     {`Bem vindo, ${user?.displayName?.split(" ")[0]}.`}
                 </Typography.Title>
+
+            </Flex>
+            <Divider children={
                 <Select
-                    style={{ width: isMobile ? "100%" : 320 }}
+                    style={{ width: 220 }}
                     value={selectedEventId}
                     onChange={setSelectedEventId}
                     options={[
@@ -124,22 +125,14 @@ const Home = () => {
                         }))
                     ]}
                 />
-            </Flex>
-            <Divider />
+            } />
             {loading ? (
-                <Spin size="large" />
+                <Flex justify="center">
+                    <Spin size="large" />
+                </Flex>
             ) : (
                 <Row gutter={[24, 24]}>
-                    <Col xs={24} sm={12} md={6}>
-                        <Card>
-                            <Statistic
-                                title="Inscrições Criadas"
-                                value={eventCount}
-                                prefix={<span style={{ verticalAlign: "middle", display: "inline-flex", alignItems: "center" }}><Calendar color="#3a89c9" /></span>}
-                            />
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} md={6}>
+                    <Col xs={24} sm={12} md={8}>
                         <Card>
                             <Statistic
                                 title="Total de Inscritos"
@@ -148,7 +141,7 @@ const Home = () => {
                             />
                         </Card>
                     </Col>
-                    <Col xs={24} sm={12} md={6}>
+                    <Col xs={24} sm={12} md={8}>
                         <Card>
                             <Statistic
                                 title="Pagos"
@@ -158,7 +151,7 @@ const Home = () => {
                             />
                         </Card>
                     </Col>
-                    <Col xs={24} sm={12} md={6}>
+                    <Col xs={24} sm={12} md={8}>
                         <Card>
                             <Statistic
                                 title="Não Pagos"

@@ -6,6 +6,7 @@ import { LogIn, RotateCw } from "lucide-react";
 import Loading from "../../components/Loading";
 import { IEvent } from "../../interfaces/Event";
 import { useNavigate } from "react-router-dom";
+import EventModal from "../../components/EventModal";
 
 const Inscricoes = () => {
     const eventService = new EventService();
@@ -28,6 +29,7 @@ const Inscricoes = () => {
 
     return (
         <Content style={{ padding: "16px" }}>
+            <EventModal />
             <Flex justify="flex-end" align="center" style={{ marginBottom: "15px" }}>
                 <RotateCw
                     color="#3a89c9"
@@ -67,7 +69,7 @@ const Inscricoes = () => {
                                     ]}
                                 >
                                     <p>
-                                    <strong>Título:</strong> {item.title}
+                                        <strong>Título:</strong> {item.title}
                                     </p>
                                     <p>
                                         <strong>Descrição:</strong> {item.description}

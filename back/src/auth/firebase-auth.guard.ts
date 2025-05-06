@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -13,7 +13,20 @@ export class FirebaseAuthGuard implements CanActivate {
       throw new UnauthorizedException('Token não fornecido.');
     }
 
-    request.user = await this.authService.verifyToken(token);
+    const user = await this.authService.verifyToken(token);
+
+    const allowedEmails = [
+      "antoniomarquesfilhosdoreijc@gmail.com",
+      "analuciapereirasantos40@gmail.com",
+      "lemuselucas@gmail.com",
+      "jacksontaylorjp@gmail.com",
+    ];
+
+    if (!allowedEmails.includes(user.email)) {
+      throw new UnauthorizedException('Acesso não autorizado!.');
+    }
+
+    request.user = user;
     return true;
   }
 }

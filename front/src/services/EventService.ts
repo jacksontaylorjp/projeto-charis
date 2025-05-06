@@ -1,6 +1,23 @@
 import apiFetch from "../api/apiConfig";
+import { IEvent } from "../interfaces/Event";
 
 export class EventService {
+    async create(event: IEvent) {
+        try {
+            const res = await apiFetch("/events", "POST", event);
+            return res;
+        } catch (error) {
+            console.error("Erro ao criar evento:", error);
+        }
+    }
+    async updateStatus(eventId: string, registrationOpen: boolean) {
+        try {
+            const res = await apiFetch(`/events/${eventId}`, "PUT", { registrationOpen });
+            return res;
+        } catch (error) {
+            console.error("Erro ao atualizar evento:", error);
+        }
+    }
     async findOn() {
         try {
             const res = await apiFetch("/events/on");

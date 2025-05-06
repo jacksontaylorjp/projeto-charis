@@ -8,7 +8,7 @@ export class AuthService {
       const decodedToken = await admin.auth().verifyIdToken(token);
       return decodedToken;
     } catch (error) {
-      throw new UnauthorizedException('Token inválido ou expirado.');
+      throw new UnauthorizedException('Token inválido ou expirado.', error);
     }
   }
 }

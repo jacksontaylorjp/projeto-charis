@@ -22,9 +22,9 @@ const CategoriesMenu = () => {
                     <ChevronLeft />
                 </Button>
             </Flex>
-            <Row gutter={[24, 24]} justify="center">
+            <Row gutter={[24, 24]} justify="center" style={{padding: 18}}>
                 {categories.map((cat, idx) => (
-                    <Col key={cat.label} xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Col key={cat.label} xs={24} sm={12} md={8} lg={8} xl={8}>
                         <Flex
                             onClick={!idx ? cat.onClick : undefined}
                             style={{

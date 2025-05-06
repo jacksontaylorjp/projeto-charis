@@ -1,8 +1,6 @@
-import { Timestamp } from "firebase-admin/firestore";
-import { IEvent } from "./event.interface";
-import { IsBoolean, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
-export class CreateEventDto implements IEvent {
+export class CreateEventDto {
     @IsString()
     title: string;
 
@@ -10,21 +8,15 @@ export class CreateEventDto implements IEvent {
     @IsString()
     description?: string;
 
+    @IsNumber()
+    value: number;
+    
+    @IsNumber()
+    vacancies: number;
+    
     // @IsDate()
     // startDate: Timestamp;
 
     // @IsDate()
     // endDate: Timestamp;
-
-    @IsBoolean()
-    registrationOpen: boolean;
-
-    @IsString()
-    createdBy: string;
-
-    // @IsDate()
-    // createdAt: Timestamp;
-
-    // @IsDate()
-    // updatedAt: Timestamp;
 }

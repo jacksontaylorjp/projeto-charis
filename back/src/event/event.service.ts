@@ -7,7 +7,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 export class EventService {
     private collection = firestore.collection('events');
     async create(
-        eventData: Omit<IEvent, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>,
+        eventData: Omit<IEvent, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'registrationOpen'>,
         userId: string,
     ): Promise<IEvent> {
         const now = Timestamp.now();
@@ -16,9 +16,23 @@ export class EventService {
             createdBy: userId,
             createdAt: now,
             updatedAt: now,
+            registrationOpen: false,
         });
 
-        return { id: eventRef.id, ...eventData, createdBy: userId, createdAt: now, updatedAt: now };
+        return { id: eventRef.id, ...eventData, createdBy: userId, createdAt: now, updatedAt: now, registrationOpen: false };
+    }
+    async update(eventId: string, event: Partial<IEvent>): Promise<boolean> {
+        try {
+            const now = Timestamp.now();
+            await this.collection.doc(eventId).update({
+                ...event,
+                updatedAt: now,
+            });
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
     async findOn(): Promise<IEvent[]> {
         const snapshot = await this.collection.where('registrationOpen', '==', true).get();

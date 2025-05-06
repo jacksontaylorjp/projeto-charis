@@ -99,7 +99,6 @@ const Registration = () => {
                     />
                 </Flex>
             </Flex>
-
             <div style={{ display: "none" }}>
                 <div id="registration-table-print" style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 900 }}>
@@ -113,7 +112,7 @@ const Registration = () => {
                                 <th style={{ border: "1px solid #ccc", padding: 8 }}>Congregação</th>
                                 <th style={{ border: "1px solid #ccc", padding: 8 }}>Função na Igreja</th>
                                 <th style={{ border: "1px solid #ccc", padding: 8 }}>Nome do Pastor</th>
-                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Status</th>
+                                <th style={{ border: "1px solid #ccc", padding: 8 }}>Pago</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -127,7 +126,7 @@ const Registration = () => {
                                     <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.congregacao}</td>
                                     <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.funcaoIgreja}</td>
                                     <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.namePastor}</td>
-                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.paid ? "Pago" : "Não Pago"}</td>
+                                    <td style={{ border: "1px solid #ccc", padding: 8 }}>{reg.paid ? "Sim" : "Não"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -145,15 +144,15 @@ const Registration = () => {
                     { title: "Telefone", dataIndex: "phone", key: "phone", width: "15%" },
                     { title: "Congregação", dataIndex: "congregacao", key: "congregacao", width: "20%" },
                     {
-                        title: "Status",
+                        title: "Pago",
                         dataIndex: "paid",
                         key: "status",
                         width: "15%",
                         render: (paid: boolean, record: IRegistration) => (
                             <Switch
                                 checked={paid}
-                                checkedChildren="Pago"
-                                unCheckedChildren="Não Pago"
+                                checkedChildren="Sim"
+                                unCheckedChildren="Não"
                                 onChange={() => handleTogglePaid(record.id!, paid)}
                                 style={{ backgroundColor: paid ? "#52c41a" : "#cf1322" }}
                                 loading={switchLoadingId === record.id}

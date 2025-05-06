@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -26,6 +28,8 @@ async function apiFetch<T>(
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    if(response.status === 401) toast.error("Acesso restrito")
+    
     const data: T = await response.json();
 
     if (!response.ok) {

@@ -8,7 +8,7 @@ const { Sider } = Layout;
 
 const items = [
     { key: "1", icon: <Home />, label: "Início", path: "adm/home" },
-    { key: "2", icon: <Users />, label: "Inscrições", path: "adm/inscricoes" },
+    { key: "2", icon: <Users />, label: "Eventos", path: "adm/inscricoes" },
 ].map((item) => ({
     ...item,
     style: { color: "#3a89c9" },

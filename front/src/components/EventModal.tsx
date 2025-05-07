@@ -98,7 +98,7 @@ const EventModal = ({ data, setEvents }: EventModalProps) => {
                     },
                 }}
             >
-                <Tooltip title="Nova inscrição">
+                <Tooltip title="Novo evento">
                     <FloatButton
                         type="primary"
                         shape="circle"
@@ -109,7 +109,7 @@ const EventModal = ({ data, setEvents }: EventModalProps) => {
             </ConfigProvider>
         }
             <Modal
-                title="Nova inscrição"
+                title="Novo evento"
                 open={isModalOpen}
                 onCancel={handleCancel}
 

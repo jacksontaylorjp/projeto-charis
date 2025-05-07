@@ -123,7 +123,7 @@ const Home = () => {
                     value={selectedEventId}
                     onChange={setSelectedEventId}
                     options={[
-                        { value: "all", label: "Todas as inscrições" },
+                        { value: "all", label: "Todos os eventos" },
                         ...events.map((e: IEvent) => ({
                             value: e.id,
                             label: e.title || e.title || "Evento"

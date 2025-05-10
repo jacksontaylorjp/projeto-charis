@@ -38,8 +38,15 @@ export class EventService {
         const snapshot = await this.collection.where('registrationOpen', '==', true).get();
         return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IEvent[];
     }
+    async findOne(id: string): Promise<IEvent | null> {
+        const doc = await this.collection.doc(id).get();
+        if (!doc.exists) return null;
+        return { id: doc.id, ...doc.data() } as IEvent;
+    }
     async findAll(): Promise<IEvent[]> {
         const snapshot = await this.collection.get();
+        console.log(snapshot.size);
+        
         return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as IEvent[];
     }
 }

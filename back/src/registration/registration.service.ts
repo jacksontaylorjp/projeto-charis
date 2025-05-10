@@ -2,11 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { firestore } from 'src/config/firebase.config';
 import { Registration } from './registration.interface';
 import { Timestamp } from 'firebase-admin/firestore'; // Importa Timestamp
+import { EventService } from 'src/event/event.service';
+import { IEvent } from 'src/event/event.interface';
 
 @Injectable()
 export class RegistrationService {
+  constructor(private readonly eventService: EventService) { }
+
   private getCollection(eventId: string) {
-    return firestore.collection(`events/${eventId}/registrations`); // Caminho dinâmico com o evento
+    return firestore.collection(`events/${eventId}/registrations`);
   }
 
   async create(registrationData: Omit<Registration, 'id' | 'createdAt' | 'updatedAt'> & { eventId: string }): Promise<Registration> {
@@ -52,6 +56,44 @@ export class RegistrationService {
       } as Registration;
     }).filter((item) => item !== null) as Registration[]; // Filtra valores nulos
   }
+
+async findByCpfAndbirthDate(cpf: string, birthDate: string): Promise<any[]> {
+  const eventsSnapshot = await firestore.collection('events').get();
+  const result: any[] = [];
+
+  for (const eventDoc of eventsSnapshot.docs) {
+    const eventId = eventDoc.id;
+    const eventData = eventDoc.data() as IEvent;
+
+    const registration: { id: string }[] = [];
+    const userSet = new Set<string>();
+
+    const collection = this.getCollection(eventId);
+    const querySnapshot = await collection
+      .where('cpf', '==', cpf)
+      .where('birthDate', '==', birthDate)
+      .get();
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as Registration;
+      if (data && doc) {
+        registration.push({ id: doc.id });
+        userSet.add(data.name);
+      }
+    });
+
+    if (registration.length > 0) {
+      result.push({
+        id: eventId,
+        title: eventData.title,
+        registration,
+        user: Array.from(userSet).map(name => ({ name }))
+      });
+    }
+  }
+
+  return result;
+}
 
   async update(eventId: string, registrationId: string, registration: Partial<Registration>): Promise<boolean> {
     const collection = this.getCollection(eventId); // Obtém a coleção com base no eventId

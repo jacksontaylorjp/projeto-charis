@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, UsePipes, ValidationPipe, Req, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, UsePipes, ValidationPipe, Req, Put, Delete, Query } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { FirebaseAuthGuard } from 'src/auth/firebase-auth.guard';
 import { CreateRegistrationDto } from './registration.dto';
@@ -14,12 +14,20 @@ export class RegistrationController {
     return this.registrationService.create(registrationData);
   }
 
+  @Get('my-registrations')
+  async findByCpfAndbirthDate(
+    @Query('cpf') cpf: string,
+    @Query('birthDate') birthDate: string
+  ) {
+    return this.registrationService.findByCpfAndbirthDate(cpf, birthDate);
+  }
+
   @UseGuards(FirebaseAuthGuard)
   @Get('/:event')
   async findByEvent(@Param('event') event: string) {
     return this.registrationService.findByEvent(event);
   }
-  
+
   @UseGuards(FirebaseAuthGuard)
   @Put(':eventId/:registrationId')
   async update(
@@ -29,7 +37,7 @@ export class RegistrationController {
   ) {
     return this.registrationService.update(eventId, registrationId, registrationData);
   }
-  
+
   @UseGuards(FirebaseAuthGuard)
   @Delete(':eventId/:registrationId')
   async delete(

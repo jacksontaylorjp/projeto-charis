@@ -23,6 +23,7 @@ export class EventController {
         const userId = req.user.uid;
         return this.eventService.create(eventData, userId);
     }
+
     @UseGuards(FirebaseAuthGuard)
     @Put(':eventId')
     async updateStatus(
@@ -31,15 +32,25 @@ export class EventController {
     ) {
         return this.eventService.update(eventId, event);
     }
+    
     //busca só os eventos que estão online
     @Get('on')
     async findOn() {
         return this.eventService.findOn();
     }
+
     //busca todos
     @UseGuards(FirebaseAuthGuard)
     @Get('all')
     async findAll() {
         return this.eventService.findAll();
     }
+
+    @Get(':id')
+    async findOne(
+        @Param('id') id: string,
+    ) {
+        return this.eventService.findOne(id);
+    }
+
 }

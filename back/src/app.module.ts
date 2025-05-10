@@ -3,10 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { PatientModule } from './registration/registration.module';
+import { RegistrationModule } from './registration/registration.module';
 import { RegistrationController } from './registration/registration.controller';
 import { RegistrationService } from './registration/registration.service';
 import { EventModule } from './event/event.module';
+import { EventService } from './event/event.service';
+import { EventController } from './event/event.controller';
 
 @Module({
   imports: [
@@ -14,10 +16,10 @@ import { EventModule } from './event/event.module';
     ConfigModule.forRoot({
       isGlobal: true, 
     }),
-    PatientModule,
+    RegistrationModule,
     EventModule,
   ],
-  controllers: [AppController, RegistrationController],
-  providers: [AppService, RegistrationService],
+  controllers: [AppController, RegistrationController, EventController],
+  providers: [AppService, RegistrationService, EventService],
 })
 export class AppModule { }
